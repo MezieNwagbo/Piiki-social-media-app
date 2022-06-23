@@ -8,10 +8,12 @@ import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import { client, urlFor } from "../client";
 import { fetchUser } from "../utils/fetchUser";
 
-const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
+const Pin = ({ pin }) => {
   const [postHovered, setPostHovered] = useState(false);
+  const [savingPost, setSavingPost] = useState(false);
 
   const navigate = useNavigate();
+  const { postedBy, image, _id, destination, save } = pin;
   const user = fetchUser();
 
   //this is an advanced way of checking if pin has already been saved. Basically you are checking if the save array is empty or not
@@ -19,12 +21,16 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
   // const alreadySaved = !!save?.filter((item) => {
   //   return item.postedBy._id === user.sub;
   // })?.length;
-  let alreadySaved = save?.filter((item) => item?.postedBy?._id === user?.sub);
+
+  let alreadySaved = pin?.save?.filter(
+    (item) => item?.postedBy?._id === user?.sub
+  );
 
   alreadySaved = alreadySaved?.length > 0 ? alreadySaved : [];
 
   const savePin = (id) => {
-    if (!alreadySaved) {
+    if (alreadySaved?.length === 0) {
+      setSavingPost(true);
       client
         .patch(id)
         .setIfMissing({ save: [] })
@@ -80,16 +86,16 @@ const Pin = ({ pin: { postedBy, image, _id, destination, save } }) => {
                   <MdDownloadForOffline />
                 </a>
               </div>
-              {alreadySaved ? (
+              {alreadySaved?.length !== 0 ? (
                 <button
+                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none"
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    savePin(_id);
+                    console.log(_id);
                   }}
-                  type="button"
-                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none"
                 >
-                  {save?.length}saved
+                  {pin.save?.length}saved
                 </button>
               ) : (
                 <button

@@ -63,7 +63,7 @@ const CreatePin = ({ user }) => {
             _ref: imageAsset?._id,
           },
         },
-        userId: user._id,
+        userid: user._id,
         postedBy: {
           _type: "postedBy",
           _ref: user._id,
@@ -95,7 +95,7 @@ const CreatePin = ({ user }) => {
               // eslint-disable-next-line jsx-a11y/label-has-associated-control
               <label>
                 <div className="flex flex-col items-center justify-center h-full">
-                  <div className="flex flex-col justify-center items-center">
+                  <div className="flex flex-col justify-center items-center cursor-pointer">
                     <p className="font-bold text-2xl">
                       <AiOutlineCloudUpload />
                     </p>
